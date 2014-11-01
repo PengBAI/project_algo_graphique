@@ -4,11 +4,19 @@
 
 void Renderer::DrawFilaire()
 {
-	// compléter ici
+    /* numbre de point à dessiner */
+    int size_point = renderable.points2D.size;
+    for(int i = 0; i < size_point - 1; i++){
+        buffer->DrawLine(renderable.points2D.data[i],
+                                        renderable.points2D.data[i+1], pointLight.diffuseColor, ambientLight.ambientColor);
+    }
+    buffer->DrawLine(renderable.points2D.data[0],
+                                        renderable.points2D.data[size_point - 1], pointLight.diffuseColor, ambientLight.ambientColor);
 }
 void Renderer::DrawFilaireCache()
 {
 	// compléter ici
+
 }
 void Renderer::DrawFacePleine()
 {

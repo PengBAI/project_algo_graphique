@@ -7,7 +7,6 @@ void Buffer::DrawLine(const Coord2D p1, const Coord2D p2, const Color c1,
 {
     int X, Y, LongX, LongY, Critere, Const1, Const2, IncX, IncY, cpt;
     Coord2D tmp;
-    Color color;
     X = p1.x;
     Y = p1.y;
     LongX = p2.x - X;
