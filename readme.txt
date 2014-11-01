@@ -4,7 +4,7 @@ Project is developped in Cdoe::Blocks under Sabayon
 
 
 All rights reserved to Polytech Tours, 37200 France. 
-Auditors: Sébastien Aupetit and Peng BAI
+Auditors: Peng BAI and Sébastien Aupetit
 
 October, 2014
 
