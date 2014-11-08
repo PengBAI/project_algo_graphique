@@ -4,17 +4,41 @@
 
 void Renderer::DrawFilaire()
 {
-    /* numbre de point à dessiner */
-    int size_point = renderable.points2D.size;
-    for(int i = 0; i < size_point - 1; i++){
-        buffer->DrawLine(renderable.points2D.data[i],
-                                        renderable.points2D.data[i+1], pointLight.diffuseColor, ambientLight.ambientColor);
+    /* numbre de faces à dessiner */
+    int nbr_face = drawable->faces.size;
+    for(int i = 0; i < nbr_face; i++){
+        /* dessiner les petits triangles */
+        /* dessiner ligne entre index1 et index2 */
+        buffer->DrawLine(renderable.points2D.data[drawable->faces.data[i].index1],
+                                        renderable.points2D.data[drawable->faces.data[i].index2], pointLight.diffuseColor, ambientLight.ambientColor);
+        /* dessiner ligne entre index2 et index3 */
+        buffer->DrawLine(renderable.points2D.data[drawable->faces.data[i].index2],
+                                        renderable.points2D.data[drawable->faces.data[i].index3], pointLight.diffuseColor, ambientLight.ambientColor);
+        /* dessiner ligne entre index1 et index3 */
+        buffer->DrawLine(renderable.points2D.data[drawable->faces.data[i].index1],
+                                        renderable.points2D.data[drawable->faces.data[i].index3], pointLight.diffuseColor, ambientLight.ambientColor);
+
     }
-    buffer->DrawLine(renderable.points2D.data[0],
-                                        renderable.points2D.data[size_point - 1], pointLight.diffuseColor, ambientLight.ambientColor);
 }
+
 void Renderer::DrawFilaireCache()
 {
+    int nbr_face = drawable->faces.size;
+    for(int i = 0; i < nbr_face; i++){
+        /* dessiner les petits triangles qui est visibles */
+        if(effectiveDrawable->faceVisibles.data[i]){
+            /* dessiner ligne entre index1 et index2 */
+            buffer->DrawLine(renderable.points2D.data[drawable->faces.data[i].index1],
+                                            renderable.points2D.data[drawable->faces.data[i].index2], pointLight.diffuseColor, ambientLight.ambientColor);
+            /* dessiner ligne entre index2 et index3 */
+            buffer->DrawLine(renderable.points2D.data[drawable->faces.data[i].index2],
+                                            renderable.points2D.data[drawable->faces.data[i].index3], pointLight.diffuseColor, ambientLight.ambientColor);
+            /* dessiner ligne entre index1 et index3 */
+            buffer->DrawLine(renderable.points2D.data[drawable->faces.data[i].index1],
+                                            renderable.points2D.data[drawable->faces.data[i].index3], pointLight.diffuseColor, ambientLight.ambientColor);
+        }
+    }
+
 	// compléter ici
 
 }
