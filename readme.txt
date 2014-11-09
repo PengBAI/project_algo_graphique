@@ -1,6 +1,6 @@
 /*******************************************************/
 
-Project is developped in Cdoe::Blocks under Sabayon
+Project is developped in Code::Blocks under Sabayon
 
 
 All rights reserved to Polytech Tours, 37200 France. 
