@@ -67,7 +67,41 @@ void Buffer::DrawLine(const Coord2D p1, const Coord2D p2, const Color c1,
 void Buffer::DrawFilledTriangle(const Coord2D p1, const Coord2D p2,
 		const Coord2D p3, const Color c1, const Color c2, const Color c3)
 {
-	// completer ici
+    /* Initialise les structures de données du scanline */
+    scanLineComputer.Init();
+    /* calculer les limites "scanline" du triangle et pour calculer les poids des trois */
+    scanLineComputer.Compute(p1, p2, p3);
+    /* draw triangle */
+    for(int pGauche = 0; pGauche < scanLineComputer.left.size; pGauche++ ){
+        for(int pDroit = 0; pDroit < scanLineComputer.right.size; pDroit++){
+
+            Coord2D pp1, pp2;
+            pp1.x = scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[0]*p1.x +
+                    scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[1]*p2.x +
+                    scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[2]*p3.x;
+
+            pp1.y = scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[0]*p1.y +
+                    scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[1]*p2.y +
+                    scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[2]*p3.y;
+
+            pp1.x = scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[0]*p1.x +
+                    scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[1]*p2.x +
+                    scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[2]*p3.x;
+
+            pp2.y = scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[0]*p1.y +
+                    scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[1]*p2.y +
+                    scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[2]*p3.y;
+
+            DrawLine(pp1, pp2,
+                           c1*scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[0] +
+                           c2*scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[1] +
+                           c3*scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[2],
+                           c1*scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[0] +
+                           c2*scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[1] +
+                           c3*scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[2]);
+        }
+    }
+
 }
 
 void Buffer::DrawPhongTriangle(const Coord2D p1, const Coord2D p2,

@@ -51,12 +51,23 @@ void Renderer::DrawFilaireCache()
                                             drawable->faceColors.data[drawable->faces.data[i].index3]);
         }
     }
-
-	// compléter ici
-
 }
 void Renderer::DrawFacePleine()
 {
+    int nbr_face = drawable->faces.size;
+    for(int i = 0; i < nbr_face; i++){
+        /* dessiner les petits triangles qui est visibles */
+        if(effectiveDrawable->faceVisibles.data[i]){
+            /* dessiner les petits triangles */
+            /* dessiner ligne entre index1 et index2 */
+            buffer->DrawFilledTriangle(renderable.points2D.data[drawable->faces.data[i].index1],
+                                        renderable.points2D.data[drawable->faces.data[i].index2],
+                                        renderable.points2D.data[drawable->faces.data[i].index3],
+                                        drawable->faceColors.data[drawable->faces.data[i].index1],
+                                        drawable->faceColors.data[drawable->faces.data[i].index2],
+                                        drawable->faceColors.data[drawable->faces.data[i].index3]);
+        }
+    }
 	// compléter ici
 }
 

@@ -10,4 +10,4 @@ October, 2014
 
 Contact:
 Sébastien Aupetit [aupetit@univ-tours.fr]
-Peng BAI [baipeng0811@gmail.com, peng.bai@etu.univ-tours.fr]
+Peng BAI [baipeng0811@gmail.com], [peng.bai@etu.univ-tours.fr]
