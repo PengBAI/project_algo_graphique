@@ -10,9 +10,9 @@
 class ScanLineComputer
 {
 public:
-	/** Le pixel le plus à gauche sur les lignes */
+	/** Le pixel x le plus à gauche sur les lignes */
 	Array<int> left;
-	/** Le pixel le plus à droite sur les lignes */
+	/** Le pixel x le plus à droite sur les lignes */
 	Array<int> right;
 	/** les trois poids associés au pixel le plus à gauche sur une ligne
 	 *

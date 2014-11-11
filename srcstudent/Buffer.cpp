@@ -71,35 +71,25 @@ void Buffer::DrawFilledTriangle(const Coord2D p1, const Coord2D p2,
     scanLineComputer.Init();
     /* calculer les limites "scanline" du triangle et pour calculer les poids des trois */
     scanLineComputer.Compute(p1, p2, p3);
-    /* draw triangle */
-    for(int pGauche = 0; pGauche < scanLineComputer.left.size; pGauche++ ){
-        for(int pDroit = 0; pDroit < scanLineComputer.right.size; pDroit++){
-
+    /* draw triangle y entre ymin et ymax */
+    for(int py = scanLineComputer.ymin; py <= scanLineComputer.ymax; py++ ){
+            /* définir 2 points de ligne pp1 et pp2 à gauche et à droite*/
             Coord2D pp1, pp2;
-            pp1.x = scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[0]*p1.x +
-                    scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[1]*p2.x +
-                    scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[2]*p3.x;
+            pp1.x = scanLineComputer.left.data[py];
+            pp1.y = py;
 
-            pp1.y = scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[0]*p1.y +
-                    scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[1]*p2.y +
-                    scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[2]*p3.y;
-
-            pp1.x = scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[0]*p1.x +
-                    scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[1]*p2.x +
-                    scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[2]*p3.x;
-
-            pp2.y = scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[0]*p1.y +
-                    scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[1]*p2.y +
-                    scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[2]*p3.y;
-
-            DrawLine(pp1, pp2,
-                           c1*scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[0] +
-                           c2*scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[1] +
-                           c3*scanLineComputer.leftweight.data[scanLineComputer.left.data[pGauche]].data[2],
-                           c1*scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[0] +
-                           c2*scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[1] +
-                           c3*scanLineComputer.rightweight.data[scanLineComputer.right.data[pDroit]].data[2]);
-        }
+            pp2.x = scanLineComputer.right.data[py];
+            pp2.y = py;
+            /* définir 2 colors et caluler l'interpolation linéaire entre eux */
+            Color cc1, cc2;
+            cc1 = c1 * scanLineComputer.leftweight.data[py].data[0] +
+                    c2 * scanLineComputer.leftweight.data[py].data[1] +
+                    c3 * scanLineComputer.leftweight.data[py].data[2];
+            cc2 = c1 * scanLineComputer.rightweight.data[py].data[0] +
+                    c2 * scanLineComputer.rightweight.data[py].data[1] +
+                    c3 * scanLineComputer.rightweight.data[py].data[2];
+            /* dessiner chaque lignes dans le triangles */
+            DrawLine(pp1, pp2, cc1, cc2);
     }
 
 }
