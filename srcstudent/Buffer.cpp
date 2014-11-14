@@ -30,9 +30,11 @@ void Buffer::DrawLine(const Coord2D p1, const Coord2D p2, const Color c1,
         for(cpt = 1; cpt <= LongX; cpt++){
             tmp.x = X;
             tmp.y = Y;
-            /* Les points intermédiaires correspondent à une interpolation linéaire entre ces deux couleurs.*/
+            /* Les points intermédiaires correspondent à une
+            interpolation linéaire entre ces deux couleurs.*/
             double poidsA = 1 - p1.Distance(tmp)/p1.Distance(p2);
             double poidsB = 1 - poidsA;
+            /* set point tmp */
             SetPoint(tmp, c1 * poidsA + c2 * poidsB);
             if(Critere > 0){
                 Y += IncY;
@@ -49,7 +51,8 @@ void Buffer::DrawLine(const Coord2D p1, const Coord2D p2, const Color c1,
         for(cpt = 1; cpt <= LongY; cpt++){
             tmp.x = X;
             tmp.y = Y;
-            /* Les points intermédiaires correspondent à une interpolation linéaire entre ces deux couleurs.*/
+            /* Les points intermédiaires correspondent à une
+            interpolation linéaire entre ces deux couleurs.*/
             double poidsA = 1 - p1.Distance(tmp)/p1.Distance(p2);
             double poidsB = 1 - poidsA;
             SetPoint(tmp, c1 * poidsA + c2 * poidsB);

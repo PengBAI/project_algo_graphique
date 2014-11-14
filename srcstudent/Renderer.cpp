@@ -87,7 +87,6 @@ void Renderer::DrawFilaireCache()
                                                 renderable.points2D.data[drawable->faces.data[i].index3],
                                                 drawable->pointColors.data[drawable->faces.data[i].index1],
                                                 drawable->pointColors.data[drawable->faces.data[i].index3]);
-
             }
         }
     }
@@ -119,7 +118,6 @@ void Renderer::DrawFacePleine()
             }
         }
     }
-	// compléter ici
 }
 
 void Renderer::DrawLambert()
