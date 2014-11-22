@@ -118,7 +118,7 @@ void Buffer::DrawPhongTriangle(const Coord2D p1, const Coord2D p2,
 
     Color colorL, colorR;
     Coord3D current3D, posiL, posiR, normalL, normalR;
-    /* pour chaque ligne */
+    /* pour chaque ligne, on calcule des color, position et normal */
     for( int py = scanLineComputer.ymin; py <= scanLineComputer.ymax; py++ )
     {
         Coord2D pointL(scanLineComputer.left.data[py], py);
@@ -158,10 +158,10 @@ void Buffer::DrawPhongTriangle(const Coord2D p1, const Coord2D p2,
 		    Coord3D tmp3D = posiL * poidsA + posiR * poidsB;
 		    Coord3D tmpNormal = normalL * poidsA + normalR * poidsB;
 
-		    Color diffuseColor = pointLight.GetColor(tmp3D, tmpNormal);
-		    Color pointColor = colorL * poidsA + colorR * poidsB;
+		    Color colorDiffuse = pointLight.GetColor(tmp3D, tmpNormal);
+		    Color colorPoint = colorL * poidsA + colorR * poidsB;
 
-		    SetPoint(tmp2D, (ambientLight.ambientColor + diffuseColor) * pointColor);
+		    SetPoint(tmp2D, (ambientLight.ambientColor + colorDiffuse) * colorPoint);
 		}
     }
 }
