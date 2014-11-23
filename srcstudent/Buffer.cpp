@@ -117,13 +117,13 @@ void Buffer::DrawPhongTriangle(const Coord2D p1, const Coord2D p2,
     SetPoint(p3, c3);
 
     Color colorL, colorR;
-    Coord3D current3D, posiL, posiR, normalL, normalR;
+    Coord3D posiL, posiR, normalL, normalR;
     /* pour chaque ligne, on calcule des color, position et normal */
     for( int py = scanLineComputer.ymin; py <= scanLineComputer.ymax; py++ )
     {
         Coord2D pointL(scanLineComputer.left.data[py], py);
         Coord2D pointR(scanLineComputer.right.data[py], py);
-
+        /* calculer les variables avec les poids */
         colorL = c1 * scanLineComputer.leftweight.data[py].data[0] +
                         c2 * scanLineComputer.leftweight.data[py].data[1] +
                         c3 * scanLineComputer.leftweight.data[py].data[2];
@@ -151,17 +151,18 @@ void Buffer::DrawPhongTriangle(const Coord2D p1, const Coord2D p2,
         /* dessiner tous les points sur la ligne courante */
 		for(int px = scanLineComputer.left.data[py]; px <= scanLineComputer.right.data[py]; px++)
 		{
+		    /* calculer les poids du point en ligne */
 		    Coord2D tmp2D(px, py);
             double poidsA = 1 - pointL.Distance(tmp2D)/pointL.Distance(pointR);
             double poidsB = 1 - poidsA;
-
+            /* calculer la couleur avec les poids*/
 		    Coord3D tmp3D = posiL * poidsA + posiR * poidsB;
 		    Coord3D tmpNormal = normalL * poidsA + normalR * poidsB;
 
-		    Color colorDiffuse = pointLight.GetColor(tmp3D, tmpNormal);
+		    Color colorLight = pointLight.GetColor(tmp3D, tmpNormal);
 		    Color colorPoint = colorL * poidsA + colorR * poidsB;
-
-		    SetPoint(tmp2D, (ambientLight.ambientColor + colorDiffuse) * colorPoint);
+            /* dessiner tous les points */
+		    SetPoint(tmp2D, (ambientLight.ambientColor + colorLight) * colorPoint);
 		}
     }
 }

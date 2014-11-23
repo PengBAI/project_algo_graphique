@@ -177,6 +177,7 @@ void Renderer::DrawGouraud()
         Face nowFace = drawable->faces.data[index];
         /* dessiner les petits triangles avec face color */
         if(drawable->colorOnFace){
+            /* color = le point lumineux et la lumière ambiante */
             Color color1 = pointLight.GetColor(effectiveDrawable->points.data[nowFace.index1],
                                                 effectiveDrawable->pointNormals.data[nowFace.index1])
                                                 + ambientLight.ambientColor;;
@@ -187,12 +188,14 @@ void Renderer::DrawGouraud()
                                                 effectiveDrawable->pointNormals.data[nowFace.index3])
                                                 + ambientLight.ambientColor;;
             Color faceColor = drawable->faceColors.data[index];
+
             buffer->DrawFilledTriangle(renderable.points2D.data[nowFace.index1],
-                                    renderable.points2D.data[nowFace.index2],
-                                    renderable.points2D.data[nowFace.index3],
-                                    color1 * faceColor, color2 * faceColor, color3 * faceColor);
+                                        renderable.points2D.data[nowFace.index2],
+                                        renderable.points2D.data[nowFace.index3],
+                                        color1 * faceColor, color2 * faceColor, color3 * faceColor);
         }else{
             /* dessiner les petits triangles avec point color */
+            /* color = le point lumineux et la lumière ambiante */
             Color color1 = (pointLight.GetColor(effectiveDrawable->points.data[nowFace.index1],
                                                 effectiveDrawable->pointNormals.data[nowFace.index1])
                                                 + ambientLight.ambientColor)
@@ -205,10 +208,11 @@ void Renderer::DrawGouraud()
                                                 effectiveDrawable->pointNormals.data[nowFace.index3])
                                                 + ambientLight.ambientColor)
                                                 * drawable->pointColors.data[nowFace.index3];
+
             buffer->DrawFilledTriangle(renderable.points2D.data[nowFace.index1],
-                                    renderable.points2D.data[nowFace.index2],
-                                    renderable.points2D.data[nowFace.index3],
-                                    color1, color2, color3);
+                                        renderable.points2D.data[nowFace.index2],
+                                        renderable.points2D.data[nowFace.index3],
+                                        color1, color2, color3);
         }
     }
 }
@@ -234,8 +238,7 @@ void Renderer::DrawPhong()
                                     renderable.points2D.data[nowFace.index1],
                                     renderable.points2D.data[nowFace.index2],
                                     renderable.points2D.data[nowFace.index3],
-                                    color, color, color,
-                                    posi1, posi2, posi3,
+                                    color, color, color, posi1, posi2, posi3,
                                     effectiveDrawable->pointNormals.data[nowFace.index1],
                                     effectiveDrawable->pointNormals.data[nowFace.index2],
                                     effectiveDrawable->pointNormals.data[nowFace.index3],
