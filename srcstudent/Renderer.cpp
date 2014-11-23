@@ -131,29 +131,34 @@ void Renderer::DrawLambert()
         Face nowFace = drawable->faces.data[index];
         /* dessiner les petits triangles avec face color */
         if(drawable->colorOnFace){
+            /* color = le point lumineux et la lumière ambiante */
             Color color1 = pointLight.GetColor(effectiveDrawable->points.data[nowFace.index1],
                                                 effectiveDrawable->faceNormals.data[index])
-                                                * drawable->faceColors.data[index];
+                                                + ambientLight.ambientColor;
             Color color2 = pointLight.GetColor(effectiveDrawable->points.data[nowFace.index2],
                                                 effectiveDrawable->faceNormals.data[index])
-                                                * drawable->faceColors.data[index];
+                                                + ambientLight.ambientColor;
             Color color3 = pointLight.GetColor(effectiveDrawable->points.data[nowFace.index2],
                                                 effectiveDrawable->faceNormals.data[index])
-                                                * drawable->faceColors.data[index];
+                                                + ambientLight.ambientColor;
+            Color faceColor = drawable->faceColors.data[index];
             buffer->DrawFilledTriangle(renderable.points2D.data[nowFace.index1],
                                     renderable.points2D.data[nowFace.index2],
                                     renderable.points2D.data[nowFace.index3],
-                                    color1, color2, color3);
+                                    color1 * faceColor, color2 * faceColor, color3 * faceColor);
         }else{
             /* dessiner les petits triangles avec point color */
-            Color color1 = pointLight.GetColor(effectiveDrawable->points.data[nowFace.index1],
+            Color color1 = (pointLight.GetColor(effectiveDrawable->points.data[nowFace.index1],
                                                 effectiveDrawable->faceNormals.data[index])
+                                                + ambientLight.ambientColor)
                                                 * drawable->pointColors.data[nowFace.index1];
-            Color color2 = pointLight.GetColor(effectiveDrawable->points.data[nowFace.index2],
+            Color color2 = (pointLight.GetColor(effectiveDrawable->points.data[nowFace.index2],
                                                 effectiveDrawable->faceNormals.data[index])
+                                                + ambientLight.ambientColor)
                                                 * drawable->pointColors.data[nowFace.index2];
-            Color color3 = pointLight.GetColor(effectiveDrawable->points.data[nowFace.index3],
+            Color color3 = (pointLight.GetColor(effectiveDrawable->points.data[nowFace.index3],
                                                 effectiveDrawable->faceNormals.data[index])
+                                                + ambientLight.ambientColor)
                                                 * drawable->pointColors.data[nowFace.index3];
             buffer->DrawFilledTriangle(renderable.points2D.data[nowFace.index1],
                                     renderable.points2D.data[nowFace.index2],
@@ -174,27 +179,31 @@ void Renderer::DrawGouraud()
         if(drawable->colorOnFace){
             Color color1 = pointLight.GetColor(effectiveDrawable->points.data[nowFace.index1],
                                                 effectiveDrawable->pointNormals.data[nowFace.index1])
-                                                * drawable->faceColors.data[index];
+                                                + ambientLight.ambientColor;;
             Color color2 = pointLight.GetColor(effectiveDrawable->points.data[nowFace.index2],
                                                 effectiveDrawable->pointNormals.data[nowFace.index2])
-                                                * drawable->faceColors.data[index];
+                                                + ambientLight.ambientColor;;
             Color color3 = pointLight.GetColor(effectiveDrawable->points.data[nowFace.index3],
                                                 effectiveDrawable->pointNormals.data[nowFace.index3])
-                                                * drawable->faceColors.data[index];
+                                                + ambientLight.ambientColor;;
+            Color faceColor = drawable->faceColors.data[index];
             buffer->DrawFilledTriangle(renderable.points2D.data[nowFace.index1],
                                     renderable.points2D.data[nowFace.index2],
                                     renderable.points2D.data[nowFace.index3],
-                                    color1, color2, color3);
+                                    color1 * faceColor, color2 * faceColor, color3 * faceColor);
         }else{
             /* dessiner les petits triangles avec point color */
-            Color color1 = pointLight.GetColor(effectiveDrawable->points.data[nowFace.index1],
+            Color color1 = (pointLight.GetColor(effectiveDrawable->points.data[nowFace.index1],
                                                 effectiveDrawable->pointNormals.data[nowFace.index1])
+                                                + ambientLight.ambientColor)
                                                 * drawable->pointColors.data[nowFace.index1];
-            Color color2 = pointLight.GetColor(effectiveDrawable->points.data[nowFace.index2],
+            Color color2 = (pointLight.GetColor(effectiveDrawable->points.data[nowFace.index2],
                                                 effectiveDrawable->pointNormals.data[nowFace.index2])
+                                                + ambientLight.ambientColor)
                                                 * drawable->pointColors.data[nowFace.index2];
-            Color color3 = pointLight.GetColor(effectiveDrawable->points.data[nowFace.index3],
+            Color color3 = (pointLight.GetColor(effectiveDrawable->points.data[nowFace.index3],
                                                 effectiveDrawable->pointNormals.data[nowFace.index3])
+                                                + ambientLight.ambientColor)
                                                 * drawable->pointColors.data[nowFace.index3];
             buffer->DrawFilledTriangle(renderable.points2D.data[nowFace.index1],
                                     renderable.points2D.data[nowFace.index2],
