@@ -32,8 +32,8 @@ void Buffer::DrawLine(const Coord2D p1, const Coord2D p2, const Color c1,
             tmp.y = Y;
             /* Les points intermédiaires correspondent à une
             interpolation linéaire entre ces deux couleurs.*/
-            double poidsA = 1 - p1.Distance(tmp)/p1.Distance(p2);
-            double poidsB = 1 - poidsA;
+            double poidsA = 1.0 - p1.Distance(tmp)/p1.Distance(p2);
+            double poidsB = 1.0 - poidsA;
             /* set point tmp */
             SetPoint(tmp, c1 * poidsA + c2 * poidsB);
             if(Critere > 0){
@@ -53,8 +53,8 @@ void Buffer::DrawLine(const Coord2D p1, const Coord2D p2, const Color c1,
             tmp.y = Y;
             /* Les points intermédiaires correspondent à une
             interpolation linéaire entre ces deux couleurs.*/
-            double poidsA = 1 - p1.Distance(tmp)/p1.Distance(p2);
-            double poidsB = 1 - poidsA;
+            double poidsA = 1.0 - p1.Distance(tmp)/p1.Distance(p2);
+            double poidsB = 1.0 - poidsA;
             SetPoint(tmp, c1 * poidsA + c2 * poidsB);
             if(Critere > 0){
                 X += IncX;
@@ -81,12 +81,13 @@ void Buffer::DrawFilledTriangle(const Coord2D p1, const Coord2D p2,
     /* draw triangle y entre ymin et ymax */
     for(int py = scanLineComputer.ymin; py <= scanLineComputer.ymax; py++ ){
             /* définir 2 points de ligne pointL et ponitR à gauche et à droite*/
-            Coord2D pointL, ponitR;
+            Coord2D pointL, pointR;
             pointL.x = scanLineComputer.left.data[py];
             pointL.y = py;
 
-            ponitR.x = scanLineComputer.right.data[py];
-            ponitR.y = py;
+            pointR.x = scanLineComputer.right.data[py];
+            pointR.y = py;
+
             /* définir 2 colors et caluler l'interpolation linéaire entre eux */
             Color colorL, colorR;
             colorL = c1 * scanLineComputer.leftweight.data[py].data[0] +
@@ -96,7 +97,7 @@ void Buffer::DrawFilledTriangle(const Coord2D p1, const Coord2D p2,
                     c2 * scanLineComputer.rightweight.data[py].data[1] +
                     c3 * scanLineComputer.rightweight.data[py].data[2];
             /* dessiner chaque lignes dans le triangles */
-            DrawLine(pointL, ponitR, colorL, colorR);
+            DrawLine(pointL, pointR, colorL, colorR);
     }
 
 }
@@ -111,16 +112,15 @@ void Buffer::DrawPhongTriangle(const Coord2D p1, const Coord2D p2,
     scanLineComputer.Init();
     /* calculer les limites "scanline" du triangle et pour calculer les poids des trois */
     scanLineComputer.Compute(p1, p2, p3);
-    /* dessiner les trois points */
-    SetPoint(p1, c1);
-    SetPoint(p2, c2);
-    SetPoint(p3, c3);
 
     Color colorL, colorR;
     Coord3D posiL, posiR, normalL, normalR;
+    Color colorLight, colorPoint;
+    Coord2D tmp2D; // point cruuent à dessiner
     /* pour chaque ligne, on calcule des color, position et normal */
     for( int py = scanLineComputer.ymin; py <= scanLineComputer.ymax; py++ )
     {
+        /* les point a gauche et à droit sur la ligne à scanner */
         Coord2D pointL(scanLineComputer.left.data[py], py);
         Coord2D pointR(scanLineComputer.right.data[py], py);
         /* calculer les variables avec les poids */
@@ -148,19 +148,32 @@ void Buffer::DrawPhongTriangle(const Coord2D p1, const Coord2D p2,
                         normal2 * scanLineComputer.rightweight.data[py].data[1] +
                         normal3 * scanLineComputer.rightweight.data[py].data[2];
 
+        /* dessiner le sommet du triqngle */
+        if( scanLineComputer.left.data[py] == scanLineComputer.right.data[py])
+		{
+			colorPoint = colorL;
+			colorLight = pointLight.GetColor(posiL, normalL);
+			tmp2D.x = scanLineComputer.left.data[py];
+			tmp2D.y = py;
+			SetPoint(tmp2D, (ambientLight.ambientColor + colorLight) * colorPoint);
+			continue;
+		}
+
         /* dessiner tous les points sur la ligne courante */
 		for(int px = scanLineComputer.left.data[py]; px <= scanLineComputer.right.data[py]; px++)
 		{
 		    /* calculer les poids du point en ligne */
-		    Coord2D tmp2D(px, py);
-            double poidsA = 1 - pointL.Distance(tmp2D)/pointL.Distance(pointR);
-            double poidsB = 1 - poidsA;
+		    tmp2D.x = px;
+		    tmp2D.y = py;
+
+            double poidsA = 1.0 - pointL.Distance(tmp2D)/pointL.Distance(pointR);
+            double poidsB = 1.0 - poidsA;
             /* calculer la couleur avec les poids*/
 		    Coord3D tmp3D = posiL * poidsA + posiR * poidsB;
 		    Coord3D tmpNormal = normalL * poidsA + normalR * poidsB;
 
-		    Color colorLight = pointLight.GetColor(tmp3D, tmpNormal);
-		    Color colorPoint = colorL * poidsA + colorR * poidsB;
+		    colorLight = pointLight.GetColor(tmp3D, tmpNormal);
+		    colorPoint = colorL * poidsA + colorR * poidsB;
             /* dessiner tous les points */
 		    SetPoint(tmp2D, (ambientLight.ambientColor + colorLight) * colorPoint);
 		}
