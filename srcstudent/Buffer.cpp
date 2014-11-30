@@ -151,31 +151,30 @@ void Buffer::DrawPhongTriangle(const Coord2D p1, const Coord2D p2,
         /* dessiner le sommet du triqngle */
         if( scanLineComputer.left.data[py] == scanLineComputer.right.data[py])
 		{
-			colorPoint = colorL;
-			colorLight = pointLight.GetColor(posiL, normalL);
-			tmp2D.x = scanLineComputer.left.data[py];
+		    /* la ligne a un seule point, on utilise la ponit à gauche */
+		    tmp2D.x = scanLineComputer.left.data[py];
 			tmp2D.y = py;
-			SetPoint(tmp2D, (ambientLight.ambientColor + colorLight) * colorPoint);
-			continue;
-		}
+			colorLight = pointLight.GetColor(posiL, normalL);
+			SetPoint(tmp2D, (ambientLight.ambientColor + colorLight) * colorL);
+		}else{
+            /* dessiner tous les points sur la ligne courante */
+            for(int px = scanLineComputer.left.data[py]; px <= scanLineComputer.right.data[py]; px++)
+            {
+                /* calculer les poids du point en ligne */
+                tmp2D.x = px;
+                tmp2D.y = py;
 
-        /* dessiner tous les points sur la ligne courante */
-		for(int px = scanLineComputer.left.data[py]; px <= scanLineComputer.right.data[py]; px++)
-		{
-		    /* calculer les poids du point en ligne */
-		    tmp2D.x = px;
-		    tmp2D.y = py;
+                double poidsA = 1.0 - pointL.Distance(tmp2D)/pointL.Distance(pointR);
+                double poidsB = 1.0 - poidsA;
+                /* calculer la couleur avec les poids*/
+                Coord3D tmp3D = posiL * poidsA + posiR * poidsB;
+                Coord3D tmpNormal = normalL * poidsA + normalR * poidsB;
 
-            double poidsA = 1.0 - pointL.Distance(tmp2D)/pointL.Distance(pointR);
-            double poidsB = 1.0 - poidsA;
-            /* calculer la couleur avec les poids*/
-		    Coord3D tmp3D = posiL * poidsA + posiR * poidsB;
-		    Coord3D tmpNormal = normalL * poidsA + normalR * poidsB;
-
-		    colorLight = pointLight.GetColor(tmp3D, tmpNormal);
-		    colorPoint = colorL * poidsA + colorR * poidsB;
-            /* dessiner tous les points */
-		    SetPoint(tmp2D, (ambientLight.ambientColor + colorLight) * colorPoint);
+                colorLight = pointLight.GetColor(tmp3D, tmpNormal);
+                colorPoint = colorL * poidsA + colorR * poidsB;
+                /* dessiner tous les points */
+                SetPoint(tmp2D, (ambientLight.ambientColor + colorLight) * colorPoint);
+            }
 		}
     }
 }
