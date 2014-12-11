@@ -34,23 +34,6 @@ void ScanLineComputer::AddEdge(const Coord2D p1, const Coord2D p2,
         Const2 = 2 * LongY;
         Critere = Const2 - LongX;
         for(cpt = 1; cpt <= LongX; cpt++){
-        /*   // dessiner les pixels dans la zone de dessin
-            if(Y < height && X < width && X > 0 && Y > 0){
-                // 0<X<width et 0<Y<height
-                AddPoint(X, Y, p1, p2, index1, index2);
-            }else if(X < width && X > 0 && Y > 0){
-                // Y>height, donc on met height-1 sur Y
-                AddPoint(X, height - 1, p1, p2, index1, index2);
-            }else if(Y < height && X > 0 && Y > 0){
-                // X>width, donc on met width-1 sur X
-                AddPoint(width - 1, Y, p1, p2, index1, index2);
-            }else if(Y < height && X < width && X > 0){
-                // Y<0, on met 1 sur Y
-                AddPoint(X, 1, p1, p2, index1, index2);
-            }else if(Y < height && X < width && Y > 0){
-                // X<0, on met 1 sur X
-                AddPoint(1, Y, p1, p2, index1, index2);
-            }   */
             if(Y >= 0 && Y < height)
             {
                 // ATTENTION : y doit être dans l'intervalle [0;height[ pour que cela fonctionne
@@ -70,23 +53,6 @@ void ScanLineComputer::AddEdge(const Coord2D p1, const Coord2D p2,
         Const2 = 2 * LongX;
         Critere = Const2 - LongY;
         for(cpt = 1; cpt <= LongY; cpt++){
-        /*  // dessiner les pixels dans la zone de dessin
-            if(Y < height && X < width && X > 0 && Y > 0){
-                // 0<X<width et 0<Y<height
-                AddPoint(X, Y, p1, p2, index1, index2);
-            }else if(X < width && X > 0 && Y > 0){
-                // Y>height, donc on met height-1 sur Y
-                AddPoint(X, height - 1, p1, p2, index1, index2);
-            }else if(Y < height && X > 0 && Y > 0){
-                // X>width, donc on met width-1 sur X
-                AddPoint(width - 1, Y, p1, p2, index1, index2);
-            }else if(Y < height && X < width && X > 0){
-                // Y<0, on met 1 sur Y
-                AddPoint(X, 1, p1, p2, index1, index2);
-            }else if(Y < height && X < width && Y > 0){
-                // X<0, on met 1 sur X
-                AddPoint(1, Y, p1, p2, index1, index2);
-            }   */
 
             if(Y >= 0 && Y < height)
             {
